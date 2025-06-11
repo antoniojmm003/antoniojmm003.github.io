@@ -1,0 +1,117 @@
+// MinuMente - Página Web de Juegos Mentales en 1 Minuto
+
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Star } from "lucide-react";
+import { motion } from "framer-motion";
+
+export default function NeuroFlash() {
+  const [language, setLanguage] = useState("es");
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const translations = {
+    es: {
+      title: "Juegos Mentales de 1 Minuto",
+      subtitle: "Desafía tu mente en tiempo récord",
+      play: "¡Jugar Ahora!",
+      commentPlaceholder: "Escribe tu comentario...",
+      submit: "Enviar",
+    },
+    en: {
+      title: "1-Minute Brain Games",
+      subtitle: "Challenge your mind in record time",
+      play: "Play Now!",
+      commentPlaceholder: "Write your comment...",
+      submit: "Submit",
+    },
+    zh: {
+      title: "1分钟脑力游戏",
+      subtitle: "用最快速度挑战你的大脑",
+      play: "开始游戏！",
+      commentPlaceholder: "写下你的评论...",
+      submit: "提交",
+    },
+  };
+
+  const t = translations[language];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-700 to-yellow-400 text-white flex flex-col items-center p-4">
+      <header className="w-full flex justify-between items-center py-4">
+        <h1 className="text-3xl font-bold">NeuroFlash</h1>
+        <select
+          className="bg-white text-black rounded p-1"
+          onChange={(e) => setLanguage(e.target.value)}
+          value={language}
+        >
+          <option value="es">Español</option>
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
+      </header>
+
+      <main className="text-center">
+        <motion.h2
+          className="text-4xl font-bold mb-2"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        >
+          {t.title}
+        </motion.h2>
+        <p className="text-xl mb-6">{t.subtitle}</p>
+
+        <Button className="bg-yellow-400 text-black hover:bg-yellow-300">
+          {t.play}
+        </Button>
+
+        <Card className="mt-10 w-full max-w-md text-black">
+          <CardContent className="p-4">
+            <h3 className="text-lg font-bold mb-2">⭐ {language === "es" ? "Valora este juego" : language === "en" ? "Rate this game" : "评分这个游戏"}</h3>
+            <div className="flex gap-2 mb-4">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Star
+                  key={i}
+                  onClick={() => setRating(i)}
+                  fill={i <= rating ? "#facc15" : "none"}
+                  stroke="#000"
+                  className="cursor-pointer"
+                />
+              ))}
+            </div>
+
+            <Textarea
+              placeholder={t.commentPlaceholder}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="mb-4"
+            />
+
+            <Button
+              className="bg-blue-700 text-white hover:bg-blue-600"
+              onClick={() => {
+                setSubmitted(true);
+                setTimeout(() => setSubmitted(false), 3000);
+              }}
+            >
+              {t.submit}
+            </Button>
+
+            {submitted && (
+              <p className="mt-2 text-green-600">
+                {language === "es"
+                  ? "¡Gracias por tu comentario!"
+                  : language === "en"
+                  ? "Thanks for your feedback!"
+                  : "感谢您的反馈！"}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </main>
+    </div>
+  );
+}
