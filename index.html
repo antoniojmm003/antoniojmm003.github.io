@@ -101,7 +101,11 @@ export default function MinuMente() {
           <motion.div
             key={idx}
             onClick={() => handleFlip(idx)}
-            className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-lg flex items-center justify-center text-2xl md:text-3xl cursor-pointer select-none shadow-md"
+            className={`w-16 h-16 md:w-20 md:h-20 rounded-lg flex items-center justify-center text-2xl md:text-3xl cursor-pointer select-none shadow-md transition-transform duration-300 ${
+              flipped.includes(idx) || matched.includes(idx)
+                ? "bg-yellow-100 text-black"
+                : "bg-white"
+            }`}
             animate={{ rotateY: flipped.includes(idx) || matched.includes(idx) ? 180 : 0 }}
             transition={{ duration: 0.4 }}
           >
@@ -120,7 +124,9 @@ export default function MinuMente() {
         </div>
       )}
 
-      <button
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => {
           setDeck(shuffle(cards));
           setFlipped([]);
@@ -128,10 +134,10 @@ export default function MinuMente() {
           setTurns(0);
           setIsFinished(false);
         }}
-        className="mt-6 bg-yellow-300 text-black px-4 py-2 rounded hover:bg-yellow-400"
+        className="mt-6 bg-yellow-300 text-black px-4 py-2 rounded hover:bg-yellow-400 shadow-lg"
       >
         {t.restart}
-      </button>
+      </motion.button>
     </div>
   );
 }
